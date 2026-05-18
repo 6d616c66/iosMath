@@ -27,9 +27,15 @@ Pod::Spec.new do |s|
     'iosMath/lib/MTMathListIndex.h',
   ]
 
-  # Exclude platform-specific files
+  # Exclude platform-specific source files
   s.ios.exclude_files         = 'iosMath/render/NS*.{h,m}', 'iosMath/render/MTLabel.{h,m}'
   s.osx.exclude_files         = 'iosMath/render/UIColor+HexString.{h,m}'
+
+  # Private headers needed by public headers (MTMathUILabel.h → MTConfig.h → category headers)
+  # These are copied to the framework's PrivateHeaders so module compilation succeeds.
+  s.private_header_files      = ['iosMath/render/MTConfig.h', 'iosMath/render/internal/*.h', 'iosMath/lib/MTUnicode.h']
+  s.ios.private_header_files  = 'iosMath/render/UIColor+HexString.h'
+  s.osx.private_header_files  = ['iosMath/render/NS*.h', 'iosMath/render/MTLabel.h']
 
   # Fonts as a resource bundle (CocoaPods best practice)
   s.resource_bundles          = { 'MTFonts' => ['iosMath/fonts/*.otf', 'iosMath/fonts/*.plist'] }
