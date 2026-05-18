@@ -9,8 +9,8 @@ Pod::Spec.new do |s|
   s.source                    = { :git => 'https://github.com/kostub/iosMath.git', :tag => s.version.to_s }
   s.swift_versions            = ['5.0']
 
-  s.ios.deployment_target     = '18.0'
-  s.osx.deployment_target     = '15.0'
+  s.ios.deployment_target     = '15.0'
+  s.osx.deployment_target     = '11.0'
 
   # All source files — includes lib, render, render/internal
   s.source_files              = 'iosMath/lib/*.{h,m}', 'iosMath/render/*.{h,m}', 'iosMath/render/internal/*.{h,m}'
