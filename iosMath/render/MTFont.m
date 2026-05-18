@@ -32,6 +32,10 @@
 
         NSBundle* bundle = [MTFont fontBundle];
         NSString* fontPath = [bundle pathForResource:name ofType:@"otf" inDirectory:@"fonts"];
+        if (!fontPath) {
+            // Fallback: flat bundle structure (e.g. CocoaPods resource bundle)
+            fontPath = [bundle pathForResource:name ofType:@"otf"];
+        }
         CGDataProviderRef fontDataProvider = CGDataProviderCreateWithFilename(fontPath.UTF8String);
         _defaultCGFont = CGFontCreateWithDataProvider(fontDataProvider);
         CFRelease(fontDataProvider);
@@ -39,6 +43,10 @@
         _ctFont = CTFontCreateWithGraphicsFont(self.defaultCGFont, size, nil, nil);
 
         NSString* mathTablePlist = [bundle pathForResource:name ofType:@"plist" inDirectory:@"fonts"];
+        if (!mathTablePlist) {
+            // Fallback: flat bundle structure (e.g. CocoaPods resource bundle)
+            mathTablePlist = [bundle pathForResource:name ofType:@"plist"];
+        }
         NSDictionary* dict = [NSDictionary dictionaryWithContentsOfFile:mathTablePlist];
         self.rawMathTable = dict;
         self.mathTable = [[MTFontMathTable alloc] initWithFont:self mathTable:_rawMathTable];
@@ -73,8 +81,10 @@
 #if SWIFT_PACKAGE
     return SWIFTPM_MODULE_BUNDLE;
 #else
-    // For Xcode builds: fonts are added directly to the app/test bundle.
-    return [NSBundle bundleForClass:[self class]];
+    NSBundle* bundle = [NSBundle bundleForClass:[self class]];
+    // CocoaPods resource bundle (MTFonts.bundle)
+    NSURL* fontBundleURL = [bundle URLForResource:@"MTFonts" withExtension:@"bundle"];
+    return fontBundleURL ? [NSBundle bundleWithURL:fontBundleURL] : bundle;
 #endif
 }
 
