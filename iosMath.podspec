@@ -15,27 +15,25 @@ Pod::Spec.new do |s|
   # All source files — includes lib, render, render/internal
   s.source_files              = 'iosMath/lib/*.{h,m}', 'iosMath/render/*.{h,m}', 'iosMath/render/internal/*.{h,m}'
 
-  # Public headers (matches module.modulemap)
+  # Public headers (matches module.modulemap).
+  # MTConfig.h must be public because it is imported by the public MTMathUILabel.h.
   s.public_header_files       = [
     'iosMath/render/MTMathUILabel.h',
     'iosMath/render/MTFont.h',
     'iosMath/render/MTFontManager.h',
     'iosMath/render/MTMathListDisplay.h',
+    'iosMath/render/MTConfig.h',
     'iosMath/lib/MTMathList.h',
     'iosMath/lib/MTMathAtomFactory.h',
     'iosMath/lib/MTMathListBuilder.h',
     'iosMath/lib/MTMathListIndex.h',
   ]
+  s.ios.public_header_files   = 'iosMath/render/UIColor+HexString.h'
+  s.osx.public_header_files   = ['iosMath/render/NS*.h', 'iosMath/render/MTLabel.h']
 
   # Exclude platform-specific source files
   s.ios.exclude_files         = 'iosMath/render/NS*.{h,m}', 'iosMath/render/MTLabel.{h,m}'
   s.osx.exclude_files         = 'iosMath/render/UIColor+HexString.{h,m}'
-
-  # Private headers needed by public headers (MTMathUILabel.h → MTConfig.h → category headers)
-  # These are copied to the framework's PrivateHeaders so module compilation succeeds.
-  s.private_header_files      = ['iosMath/render/MTConfig.h', 'iosMath/render/internal/*.h', 'iosMath/lib/MTUnicode.h']
-  s.ios.private_header_files  = 'iosMath/render/UIColor+HexString.h'
-  s.osx.private_header_files  = ['iosMath/render/NS*.h', 'iosMath/render/MTLabel.h']
 
   # Fonts as a resource bundle (CocoaPods best practice)
   s.resource_bundles          = { 'MTFonts' => ['iosMath/fonts/*.otf', 'iosMath/fonts/*.plist'] }
