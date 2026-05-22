@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "iosMath",
     platforms: [
-        .iOS(.v18),
+        .iOS(.v15),
         .macOS(.v15),
     ],
     products: [
